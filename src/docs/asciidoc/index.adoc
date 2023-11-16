@@ -1,0 +1,32 @@
+= AccountBook API DOCS
+:doctype: book
+:iocons: front
+:source-highlighter: highlightjs
+:toc: left
+:toclevels: 2
+:sectlinks:
+
+== 글 단 건 조회
+
+=== HTTP요청
+include::{snippets}/post-inquiry/http-request.adoc[]
+
+=== 요청 파라미터 설명
+include::{snippets}/post-inquiry/path-parameters.adoc[]
+
+=== 응답
+include::{snippets}/post-inquiry/http-response.adoc[]
+
+=== 응답 파라미터 설명
+include::{snippets}/post-inquiry/response-fields.adoc[]
+
+== 글 등록
+=== HTTP 요청
+include::{snippets}/post-create/http-request.adoc[]
+
+=== 요청 파라미터
+include::{snippets}/post-create/request-fields.adoc[]
+
+=== HTTP 응답
+include::{snippets}/post-create/http-response.adoc[]
+

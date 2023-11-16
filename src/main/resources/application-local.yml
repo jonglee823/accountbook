@@ -1,0 +1,32 @@
+spring:
+  # DB ?? ??
+  datasource:
+    url: jdbc:mysql://127.0.0.1:3306/jh
+    username: root
+    password: tkfkd12dl!
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+  devtools:
+    livereload:
+      enabled: true
+  freemarker:
+    cache: false
+
+  data:
+    web:
+      pageable:
+        one-indexed-parameters: true
+        default-page-size: 5
+  # JPA ??
+  jpa:
+    hibernate:
+      ddl-auto: create
+    properties:
+      hibernate:
+        show_sql: true
+        formate_sql: true
+
+#log ??
+logging:
+  level:
+    org.hibernate.SQL: debug

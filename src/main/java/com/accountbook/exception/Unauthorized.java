@@ -14,7 +14,7 @@ public class Unauthorized extends AccountException{
 
 
     @Override
-    public String getStatusCode() {
-        return "401";
+    public int getStatusCode() {
+        return 401;
     }
 }

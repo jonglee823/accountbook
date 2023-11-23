@@ -1,0 +1,9 @@
+
+### 로그인 요청 테스트
+POST http://localhost:8080/auth/login
+Content-Type: application/json
+
+{
+  "email": "jh2@kakao.com"
+  ,"password": "1234"
+}

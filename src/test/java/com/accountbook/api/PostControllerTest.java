@@ -99,7 +99,7 @@ class PostControllerTest {
                 )     //application/json
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.code").value("400"))
-                .andExpect(jsonPath("$.message").value("잘못된 요청입니다."))
+                .andExpect(jsonPath("$.message").value("잘못된 요청 입니다."))
                 .andDo(print());
 
     }

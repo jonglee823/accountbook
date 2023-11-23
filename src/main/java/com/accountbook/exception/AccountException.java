@@ -10,6 +10,10 @@ public abstract class AccountException extends RuntimeException{
 
     public final Map<String, String> validation = new HashMap<String, String>();
 
+    public AccountException(){
+
+    }
+
     public AccountException(String message) {
         super(message);
     }
@@ -18,7 +22,7 @@ public abstract class AccountException extends RuntimeException{
         super(message, cause);
     }
 
-    public abstract String getStatusCode();
+    public abstract int getStatusCode();
 
     public void addValidation(String fieldName, String message){
         validation.put(fieldName, message);

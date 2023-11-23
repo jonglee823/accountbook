@@ -1,0 +1,1 @@
+INSERT INTO jh.user (name, email, password, create_at) VALUES('jh2', 'jh2@kakao.com','1234', '2023-11-21 00:00:00')

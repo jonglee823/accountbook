@@ -22,7 +22,7 @@ public class ExceptionController {
     public ErrorResponse invalidRequestHandler(MethodArgumentNotValidException e) {
         ErrorResponse response = ErrorResponse.builder()
                 .code("400")
-                .message("잘못된 요청입니다.")
+                .message("잘못된 요청 입니다.")
                 .build();
 
         for (FieldError fieldError : e.getFieldErrors()) {
@@ -46,10 +46,10 @@ public class ExceptionController {
 
     @ExceptionHandler(AccountException.class)
     public ResponseEntity<ErrorResponse> commonRunTimeException(AccountException e){
-        String statusCode = e.getStatusCode();
+        int statusCode = e.getStatusCode();
 
         ErrorResponse body = ErrorResponse.builder()
-                                            .code(statusCode)
+                                            .code(String.valueOf(statusCode))
                                             .message(e.getMessage())
                                             .validation(e.getValidation())
                                             .build();

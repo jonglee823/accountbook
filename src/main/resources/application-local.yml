@@ -12,6 +12,7 @@ spring:
   freemarker:
     cache: false
 
+
   data:
     web:
       pageable:
@@ -20,11 +21,16 @@ spring:
   # JPA ??
   jpa:
     hibernate:
-      ddl-auto: validate
+      ddl-auto: create-drop
     properties:
       hibernate:
         format_sql: true
         use_sql_comments: true
+    defer-datasource-initialization: true
+  sql:
+    init:
+      mode: always
+
 
 #log ??
 logging:

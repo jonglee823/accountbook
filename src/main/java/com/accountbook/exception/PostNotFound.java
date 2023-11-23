@@ -10,7 +10,7 @@ public class PostNotFound extends AccountException{
 
 
     @Override
-    public String getStatusCode() {
-        return "404";
+    public int getStatusCode() {
+        return 404;
     }
 }

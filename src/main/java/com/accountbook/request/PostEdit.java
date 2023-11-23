@@ -2,11 +2,13 @@ package com.accountbook.request;
 
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.validation.constraints.NotBlank;
 
 @Getter
+@NoArgsConstructor
 public class PostEdit {
 
     @NotBlank(message = "타이틀을 입력해주세요.")

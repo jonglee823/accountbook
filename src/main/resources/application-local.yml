@@ -2,7 +2,7 @@ spring:
   # DB ?? ??
   datasource:
     url: jdbc:mysql://127.0.0.1:3306/jh
-    username: root
+    username: jh2
     password: tkfkd12dl!
     driver-class-name: com.mysql.cj.jdbc.Driver
 
@@ -20,13 +20,18 @@ spring:
   # JPA ??
   jpa:
     hibernate:
-      ddl-auto: create
+      ddl-auto: validate
     properties:
       hibernate:
-        show_sql: true
-        formate_sql: true
+        format_sql: true
+        use_sql_comments: true
 
 #log ??
 logging:
   level:
-    org.hibernate.SQL: debug
+    org:
+      hibernate:
+        SQL: debug
+        type:
+        descriptor:
+          sql : trace

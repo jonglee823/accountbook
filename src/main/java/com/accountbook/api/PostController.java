@@ -1,6 +1,7 @@
 package com.accountbook.api;
 
 
+import com.accountbook.config.data.UserSession;
 import com.accountbook.domain.Post;
 import com.accountbook.repository.PostRepository;
 import com.accountbook.request.PostEdit;
@@ -30,6 +31,11 @@ import java.util.Optional;
 public class PostController {
 
     private final PostService postService;
+
+    @GetMapping("/index")
+    public UserSession index(UserSession userSession){
+        return userSession;
+    }
 
     @PostMapping("/posts")
     public void post(@RequestBody @Valid PostRequest request){

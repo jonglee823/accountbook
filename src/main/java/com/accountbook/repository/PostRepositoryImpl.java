@@ -4,8 +4,10 @@ import com.accountbook.domain.Post;
 import com.accountbook.domain.QPost;
 import com.accountbook.request.PostSearch;
 import com.querydsl.core.types.Order;
+import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.support.PageableExecutionUtils;
 
 import java.util.List;
 

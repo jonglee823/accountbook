@@ -471,7 +471,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <h3 id="_http요청"><a class="link" href="#_http요청">HTTP요청</a></h3>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">GET /posts/1 HTTP/1.1
+<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">GET /posts/405 HTTP/1.1
 Accept: application/json
 Host: accoutbook.com</code></pre>
 </div>
@@ -505,9 +505,9 @@ Host: accoutbook.com</code></pre>
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">HTTP/1.1 200 OK
 Content-Type: application/json
-Content-Length: 64
+Content-Length: 66
 
-{"id":1,"title":"게시글 제목","content":"게시글 내용"}</code></pre>
+{"id":405,"title":"게시글 제목","content":"게시글 내용"}</code></pre>
 </div>
 </div>
 </div>
@@ -622,7 +622,7 @@ Host: accoutbook.com
 <div id="footer">
 <div id="footer-text">
 Version 0.0.1-SNAPSHOT<br>
-Last updated 2023-11-15 22:50:14 +0900
+Last updated 2023-11-16 16:39:39 +0900
 </div>
 </div>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/styles/github.min.css">

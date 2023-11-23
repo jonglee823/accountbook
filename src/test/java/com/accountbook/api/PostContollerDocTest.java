@@ -70,8 +70,9 @@ public class PostContollerDocTest {
         //when
         postRepository.save(post);
 
-        this.mockMvc.perform(get("/posts/{postId}", 1L)
+        this.mockMvc.perform(get("/posts/{postId}", post.getId())
                             .accept(MediaType.APPLICATION_JSON))
+                            .andDo(print())
                             .andDo(document("post-inquiry"
                                     , pathParameters(
                                                 parameterWithName("postId").description("게시글 ID")
@@ -83,7 +84,6 @@ public class PostContollerDocTest {
                                     )
 
                             ))
-                .andDo(print())
                             .andExpect(status().isOk());
     }
 

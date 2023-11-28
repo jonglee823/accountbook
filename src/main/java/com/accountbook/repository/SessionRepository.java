@@ -10,5 +10,7 @@ import java.util.Optional;
 @Repository
 public interface SessionRepository extends CrudRepository<Session, Long> {
 
+    Optional<Session> findByToken(String token);
+
 
 }

@@ -1,5 +1,6 @@
 package com.accountbook.controller;
 
+import com.accountbook.domain.Session;
 import com.accountbook.domain.User;
 import com.accountbook.repository.SessionRepository;
 import com.accountbook.repository.UserRepository;
@@ -16,11 +17,13 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import javax.transaction.Transactional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -185,4 +188,57 @@ class AuthControllerTest {
         assertEquals(1L, user.getSessions().size());
     }
 
+    @Test
+    @Transactional
+    @DisplayName("회원 등록 후 DB에서 세션 확인")
+    void createMemberAndCheckSessionInDB() throws Exception {
+        //given
+        User user = userRepository.save(User.builder()
+                .name("이종혁")
+                .email("jh2@kakao.com")
+                .password("1234")
+                .build()
+        );
+
+        Session session = user.addSession();
+        userRepository.save(user);
+
+        //EXPECTED
+        mockMvc.perform(get("/index")
+                        .contentType(APPLICATION_JSON)
+                        .header("Authorization", session.getToken())
+                )
+                .andDo(print())
+                .andExpect(status().isOk())
+        ;
+
+        assertEquals(1L, user.getSessions().size());
+    }
+
+    @Test
+    @Transactional
+    @DisplayName("회원 등록 & 잘못된 token 요청시 401")
+    void InvalidTokenAnd401() throws Exception {
+        //given
+        User user = userRepository.save(User.builder()
+                .name("이종혁")
+                .email("jh2@kakao.com")
+                .password("1234")
+                .build()
+        );
+
+        Session session = user.addSession();
+        userRepository.save(user);
+
+        //EXPECTED
+        mockMvc.perform(get("/index")
+                        .contentType(APPLICATION_JSON)
+                        .header("Authorization", session.getToken()+"_____TOKEN")
+                )
+                .andDo(print())
+                .andExpect(status().isUnauthorized())
+        ;
+
+        assertEquals(1L, user.getSessions().size());
+    }
 }

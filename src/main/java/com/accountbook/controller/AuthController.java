@@ -4,6 +4,8 @@ import com.accountbook.domain.User;
 import com.accountbook.exception.InvalidLoginInfo;
 import com.accountbook.repository.UserRepository;
 import com.accountbook.request.Login;
+import com.accountbook.response.SessionResponse;
+import com.accountbook.service.AuthService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -15,19 +17,21 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class AuthController {
 
-    private final UserRepository userRepository;
+    //private final UserRepository userRepository;
+    private final AuthService authService;
 
     @PostMapping("/auth/login")
-    public User login(@RequestBody Login login){
+    public SessionResponse login(@RequestBody Login login){
         //json ID/ PW
         log.info(">>>>>>={}", login);
 
         //DB 조회
-        User user = userRepository.findByEmailAndPassword(login.getEmail(), login.getPassword())
-                .orElseThrow(()-> new InvalidLoginInfo());
+//        User user = userRepository.findByEmailAndPassword(login.getEmail(), login.getPassword())
+//                .orElseThrow(()-> new InvalidLoginInfo());
 
+        return authService.signin(login);
         //TOKEN 응답
-    return user;
+    //return user;
     }
 
 }

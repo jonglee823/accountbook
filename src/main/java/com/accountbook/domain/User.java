@@ -1,18 +1,19 @@
 package com.accountbook.domain;
 
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+
+import static javax.persistence.CascadeType.ALL;
 
 @Entity
 @Getter
 @Setter
 @ToString
+@NoArgsConstructor
 public class User {
 
     @Id
@@ -25,6 +26,27 @@ public class User {
 
     private String name;
 
-    private String createAt;
+    @Builder
+    public User(String email, String password, String name) {
+        this.email = email;
+        this.password = password;
+        this.name = name;
+        this.createAt = LocalDateTime.now();
+    }
+
+    private LocalDateTime createAt;
+
+    @OneToMany(cascade = ALL, fetch = FetchType.LAZY, mappedBy = "user")
+    private List<Session> sessions = new ArrayList<>();
+
+    public Session addSession(){
+        Session session = Session.builder()
+                        .user(this)
+                        .build();
+
+        sessions.add(session);
+
+        return session;
+    }
 
 }

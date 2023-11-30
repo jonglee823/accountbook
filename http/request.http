@@ -3,4 +3,4 @@
 
 GET http://localhost:8080/index
 Content-Type: application/json
-Authorization: asfd
+cookie: 2fd7b7c7-449b-4f80-af51-8a09884b400a

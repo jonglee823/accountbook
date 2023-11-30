@@ -6,6 +6,9 @@ spring:
     password: tkfkd12dl!
     driver-class-name: com.mysql.cj.jdbc.Driver
 
+  #domain Set
+
+
   devtools:
     livereload:
       enabled: true
@@ -41,3 +44,7 @@ logging:
         type:
         descriptor:
           sql : trace
+
+server:
+  domain:
+    name: localhost

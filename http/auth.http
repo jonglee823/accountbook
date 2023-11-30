@@ -7,3 +7,9 @@ Content-Type: application/json
   "email": "jh2@kakao.com"
   ,"password": "1234"
 }
+
+
+###인증 페이지 요청
+GET http://localhost:8080/index
+Content-Type: application/json
+Cookie: SESSION=4a2889ff-b3ff-4253-a50a-4190ASdasdasd

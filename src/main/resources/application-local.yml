@@ -45,6 +45,7 @@ logging:
         descriptor:
           sql : trace
 
-server:
-  domain:
-    name: localhost
+account:
+  domain: localhost
+  key : 92voKL6hlHBTr/TlpTRiPJ/udey58grzenZ8dJqz3VE=
+

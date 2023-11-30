@@ -12,4 +12,4 @@ Content-Type: application/json
 ###인증 페이지 요청
 GET http://localhost:8080/index
 Content-Type: application/json
-Cookie: SESSION=4a2889ff-b3ff-4253-a50a-4190ASdasdasd
+Authorization:  eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxIiwiaWF0IjoxNzAxMzE0ODI4fQ.eLcDCazc90CXPNBX26fvMSVLEhFJqXpS5R_nkgtmJfY

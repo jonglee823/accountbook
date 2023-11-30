@@ -14,6 +14,11 @@ public class UserSession {
 
     public String token;
 
+    public UserSession(Long id, String token) {
+        this.id = id;
+        this.token = token;
+    }
+
     public UserSession(Session session) {
         this.id = session.getId();
         this.token = session.getToken();

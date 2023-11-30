@@ -13,8 +13,8 @@ public class SessionResponse {
     private final String token;
 
     @Builder
-    public SessionResponse(Session session) {
-        this.token = session.getToken();
+    public SessionResponse(String token) {
+        this.token = token;
 
     }
 }

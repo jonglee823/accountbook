@@ -1,5 +1,6 @@
 package com.accountbook.controller;
 
+import com.accountbook.config.APPConfig;
 import com.accountbook.domain.Session;
 import com.accountbook.domain.User;
 import com.accountbook.repository.SessionRepository;
@@ -7,6 +8,7 @@ import com.accountbook.repository.UserRepository;
 import com.accountbook.request.Login;
 import com.accountbook.response.SessionResponse;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import io.jsonwebtoken.Jwts;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -20,6 +22,8 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import javax.transaction.Transactional;
+
+import java.util.Date;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
@@ -42,6 +46,9 @@ class AuthControllerTest {
     private MockMvc mockMvc;
 
     @Autowired
+    private APPConfig appConfig;
+
+    @Autowired
     UserRepository userRepository;
 
     @Autowired
@@ -56,6 +63,14 @@ class AuthControllerTest {
     @Test
     @DisplayName("reqeust ID/PW")
     void reqeustPostIdAndPw() throws Exception {
+        //given
+        User user = userRepository.save(User.builder()
+                .name("이종혁")
+                .email("jh2@kakao.com")
+                .password("1234")
+                .build()
+        );
+
         //given
         Login login = Login.builder()
                 .email("jh2@kakao.com")
@@ -125,71 +140,6 @@ class AuthControllerTest {
 
     @Test
     @Transactional
-    @DisplayName("회원 등록 후 세션 생성")
-    void createMemberAndSession() throws Exception {
-        //given
-        User user = userRepository.save(User.builder()
-                .name("이종혁")
-                .email("jh2@kakao.com")
-                .password("1234")
-                .build()
-        );
-
-        Login login = Login.builder()
-                .email("jh2@kakao.com")
-                .password("1234")
-                .build();
-
-        String value = objectMapper.writeValueAsString(login);
-
-        //EXPECTED
-        mockMvc.perform(post("/auth/login")
-                        .contentType(APPLICATION_JSON)
-                        .content(value)
-                )
-                .andDo(print())
-                .andExpect(status().isOk())
-
-        ;
-
-        assertEquals(1L, user.getSessions().size());
-    }
-
-    @Test
-    @Transactional
-    @DisplayName("회원 등록 후 세션 확인")
-    void createMemberAndCheckSession() throws Exception {
-        //given
-        User user = userRepository.save(User.builder()
-                .name("이종혁")
-                .email("jh2@kakao.com")
-                .password("1234")
-                .build()
-        );
-
-        Login login = Login.builder()
-                .email("jh2@kakao.com")
-                .password("1234")
-                .build();
-
-        String value = objectMapper.writeValueAsString(login);
-
-        //EXPECTED
-        mockMvc.perform(post("/auth/login")
-                        .contentType(APPLICATION_JSON)
-                        .content(value)
-                )
-                .andDo(print())
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.token").value(user.getSessions().get(0).getToken()))
-
-        ;
-
-        assertEquals(1L, user.getSessions().size());
-    }
-
-    @Test
-    @Transactional
     @DisplayName("회원 등록 후 DB에서 세션 확인")
     void createMemberAndCheckSessionInDB() throws Exception {
         //given
@@ -203,16 +153,27 @@ class AuthControllerTest {
         Session session = user.addSession();
         userRepository.save(user);
 
+        String jws = Jwts.builder()
+                .subject(user.getId().toString())
+                .signWith(appConfig.getSecretKey())
+                .issuedAt(new Date())
+                .compact();
+
         //EXPECTED
         mockMvc.perform(get("/index")
                         .contentType(APPLICATION_JSON)
-                        .header("Authorization", session.getToken())
+                        .header("Authorization", jws)
                 )
                 .andDo(print())
                 .andExpect(status().isOk())
         ;
 
-        assertEquals(1L, user.getSessions().size());
+        assert Jwts.parser().verifyWith(appConfig.getSecretKey())
+                .build()
+                .parseSignedClaims(jws)
+                .getPayload()
+                .getSubject()
+                .equals(user.getId().toString());
     }
 
     @Test

@@ -1,6 +1,5 @@
 package com.accountbook.service;
 
-import com.accountbook.repository.SessionRepository;
 import com.accountbook.repository.UserRepository;
 import com.accountbook.request.Login;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -14,7 +13,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -30,9 +28,6 @@ class AuthServiceTest {
     UserRepository userRepository;
 
     @Autowired
-    SessionRepository sessionRepository;
-
-    @Autowired
     MockMvc mockMvc;
 
     @Autowired
@@ -41,7 +36,6 @@ class AuthServiceTest {
     @BeforeEach
     public void clean(){
         userRepository.deleteAll();
-        sessionRepository.deleteAll();
     }
 
     @Test

@@ -1,15 +1,16 @@
-
-### 로그인 요청 테스트
-POST http://localhost:8080/auth/login
+### 회원 가입
+POST http://localhost:8080/auth/signup
 Content-Type: application/json
 
 {
-  "email": "jh2@kakao.com"
-  ,"password": "1234"
+"name":"이종혁"
+,"email":"jh2@kakao.com"
+,"password":"1234"
 }
 
 
-###인증 페이지 요청
-GET http://localhost:8080/index
-Content-Type: application/json
-Authorization:  eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxIiwiaWF0IjoxNzAxMzE0ODI4fQ.eLcDCazc90CXPNBX26fvMSVLEhFJqXpS5R_nkgtmJfY
+### 로그인 요청 테스트
+POST http://localhost:8080/auth/login
+Content-Type: application/x-www-form-urlencoded
+
+username=jh2@kakao.com&password=1234&remember=1

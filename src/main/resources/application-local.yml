@@ -6,7 +6,15 @@ spring:
     password: tkfkd12dl!
     driver-class-name: com.mysql.cj.jdbc.Driver
 
+  session:
+    jdbc:
+      initialize-schema: always
+
   #domain Set
+
+  security:
+    debug:
+      mode : true
 
 
   devtools:
@@ -29,6 +37,7 @@ spring:
       hibernate:
         format_sql: true
         use_sql_comments: true
+        dialect: org.hibernate.dialect.MySQLDialect
     defer-datasource-initialization: true
   sql:
     init:
@@ -39,11 +48,14 @@ spring:
 logging:
   level:
     org:
+      springframework:
+        security=DEBUG:
       hibernate:
         SQL: debug
         type:
         descriptor:
           sql : trace
+
 
 account:
   domain: localhost

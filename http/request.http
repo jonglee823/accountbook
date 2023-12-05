@@ -1,6 +1,4 @@
 
 ### 테스트 요청
 
-GET http://localhost:8080/index
-Content-Type: application/json
-cookie: 2fd7b7c7-449b-4f80-af51-8a09884b400a
+GET http://localhost:8080/

@@ -9,8 +9,28 @@ Content-Type: application/json
 }
 
 
-### 로그인 요청 테스트
-POST http://localhost:8080/auth/login
-Content-Type: application/x-www-form-urlencoded
+//### 로그인 요청 테스트(USE FORM)
+//POST http://localhost:8080/auth/login
+//Content-Type: application/x-www-form-urlencoded
+//
+//username=jh2@kakao.com&password=1234
 
-username=jh2@kakao.com&password=1234&remember=1
+### 로그인 요청 테스트(USE JSON)
+POST http://localhost:8080/auth/login
+Content-Type: application/json
+
+{
+  "email":"jh2@kakao.com",
+  "password":"1234",
+  "remember" : "1"
+}
+
+
+
+
+### ADMIN 화면  요청 테스트
+GET http://localhost:8080/admin
+
+### USER 화면  요청 테스트
+GET http://localhost:8080/user
+

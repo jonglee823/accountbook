@@ -16,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -54,6 +55,7 @@ class PostControllerTest {
 
     @Test
     @DisplayName("/posts 요청시 Hello world 출력")
+    @WithMockUser(username = "jh2@kakao.com", password = "1234", roles = {"ADMIN"})
     void test() throws Exception{
         //given
         //Post request = new Post();
@@ -81,6 +83,7 @@ class PostControllerTest {
     }
     @Test
     @DisplayName("/posts 요청시 파라미터 valid체크")
+    @WithMockUser(username = "jh2@kakao.com", password = "1234", roles = {"ADMIN"})
     void testValid() throws Exception{
         //given
         Post request = Post.builder().build();
@@ -106,6 +109,7 @@ class PostControllerTest {
 
     @Test
     @DisplayName("/posts 요청 내용 DB 저장")
+    @WithMockUser(username = "jh2@kakao.com", password = "1234", roles = {"ADMIN"})
     void test3() throws Exception{
 
         //given
@@ -218,6 +222,7 @@ class PostControllerTest {
 
     @Test
     @DisplayName("글 제목 수정하기")
+    @WithMockUser(username = "jh2@kakao.com", password = "1234", roles = {"ADMIN"})
     void test7() throws Exception {
 
         Post request = Post.builder()
@@ -246,6 +251,7 @@ class PostControllerTest {
 
     @Test
     @DisplayName("글 삭제하기")
+    @WithMockUser(username = "jh2@kakao.com", password = "1234", roles = {"ADMIN"})
     void deleteById() throws Exception {
 
 
@@ -267,20 +273,21 @@ class PostControllerTest {
     @DisplayName("존재하지 않는 데이터 요청시 404 return")
     void notFoundException() throws Exception {
 
-        long id = 1000l;
+        long id = 1000L;
         //EXPECTED
         mockMvc.perform(get("/posts/{postId}", id)
                         .contentType(APPLICATION_JSON))
                 .andExpect(status().isNotFound())
-                .andExpect(jsonPath("$.message").value("존재 하지 않는 글입니다."))
+                .andExpect(jsonPath("$.message").value("존재 하지 않는 글 입니다."))
                 .andDo(print());
     }
 
     @Test
     @DisplayName("존재하지 않는 데이터 수정")
+    @WithMockUser(username = "jh2@kakao.com", password = "1234", roles = {"ADMIN"})
     void updateButNotFoundException() throws Exception {
 
-        long id = 1000l;
+        long id = 1000123L;
 
         PostEditor postEditor = PostEditor.builder()
                 .title("수정 제목")
@@ -296,7 +303,7 @@ class PostControllerTest {
                         .content(request)
                 )
                 .andExpect(status().isNotFound())
-                .andExpect(jsonPath("$.message").value("존재 하지 않는 글입니다."))
+                .andExpect(jsonPath("$.message").value("존재 하지 않는 글 입니다."))
                 .andDo(print());
     }
 

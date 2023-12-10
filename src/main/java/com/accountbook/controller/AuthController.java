@@ -1,5 +1,6 @@
 package com.accountbook.controller;
 
+import com.accountbook.api.PostController;
 import com.accountbook.config.APPConfig;
 import com.accountbook.domain.Siginup;
 import com.accountbook.service.AuthService;
@@ -22,11 +23,6 @@ public class AuthController {
     private final AuthService authService;
 
     private final APPConfig appConfig;
-
-    @GetMapping("/auth/login")
-    public String login(){
-        return "login page";
-    }
 
     @PostMapping("/auth/signup")
     public void signup(@RequestBody Siginup signup){

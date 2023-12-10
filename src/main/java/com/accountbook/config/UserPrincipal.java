@@ -12,7 +12,13 @@ public class UserPrincipal extends User {
     private final Long id;
 
     public UserPrincipal(com.accountbook.domain.User user) {
-        super(user.getEmail(), user.getPassword(), List.of(new SimpleGrantedAuthority("ADMIN")));
+        super(user.getEmail(), user.getPassword(),
+//                List.of(new SimpleGrantedAuthority("ROLE_USER")
+//                        ,new SimpleGrantedAuthority("WRITE")
+//                )
+                List.of(new SimpleGrantedAuthority("ROLE_ADMIN")
+                )
+            );
         this.id = user.getId();
     }
 

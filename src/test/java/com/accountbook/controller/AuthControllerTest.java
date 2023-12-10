@@ -80,8 +80,8 @@ class AuthControllerTest {
         //given
         User user = userRepository.save(User.builder()
                 .name("이종혁")
-                .email("jh2@kakao.com")
-                .password("1234")
+                .email("jh3@kakao.com")
+                .password("12345")
                 .build()
         );
 

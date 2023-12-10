@@ -15,6 +15,7 @@ import org.springframework.restdocs.RestDocumentationContextProvider;
 import org.springframework.restdocs.RestDocumentationExtension;
 import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders;
 import org.springframework.restdocs.payload.PayloadDocumentation;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
@@ -89,6 +90,7 @@ public class PostContollerDocTest {
 
     @Test
     @DisplayName("게시글 저장")
+    @WithMockUser(username = "jh2@kakao.com", password = "1234", roles = {"ADMIN"})
     void insertPost() throws Exception{
 
         //given

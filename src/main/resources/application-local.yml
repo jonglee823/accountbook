@@ -19,7 +19,7 @@ spring:
 
   devtools:
     livereload:
-      enabled: true
+      enabled: false
   freemarker:
     cache: false
 

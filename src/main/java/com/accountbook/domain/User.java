@@ -27,6 +27,9 @@ public class User {
 
     private String name;
 
+    @OneToMany(mappedBy = "user", cascade = ALL)
+    private List<Post> post;
+
     @Builder
     public User(String email, String password, String name) {
         this.email = email;

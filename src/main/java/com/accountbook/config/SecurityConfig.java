@@ -35,7 +35,6 @@ import org.springframework.security.web.context.HttpSessionSecurityContextReposi
 
 @Slf4j
 @Configuration
-@EnableMethodSecurity()
 @EnableWebSecurity
 @RequiredArgsConstructor
 public class SecurityConfig {

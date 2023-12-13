@@ -1,17 +1,18 @@
 package com.accountbook.api;
 
+import com.accountbook.config.AccountMockUser;
 import com.accountbook.domain.Post;
 import com.accountbook.domain.PostEditor;
 
+import com.accountbook.domain.User;
 import com.accountbook.exception.PostNotFound;
 import com.accountbook.repository.PostRepository;
+import com.accountbook.repository.UserRepository;
+import com.accountbook.request.PostRequest;
 import com.accountbook.service.PostService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.assertj.core.util.Lists;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -48,45 +49,25 @@ class PostControllerTest {
     @Autowired
     private PostService postService;
 
+    @Autowired
+    private UserRepository userRepository;
+
+    @AfterEach
+    void cleanUser(){
+        userRepository.deleteAll();
+    }
+
     @BeforeEach
     void clean(){
         postRepository.deleteAll();
     }
 
     @Test
-    @DisplayName("/posts 요청시 Hello world 출력")
-    @WithMockUser(username = "jh2@kakao.com", password = "1234", roles = {"ADMIN"})
-    void test() throws Exception{
-        //given
-        //Post request = new Post();
-
-        Post request = Post.builder()
-                .title("글 제목")
-                .content("글 내용")
-                .build();
-
-        //ObjectMapper objectMapper = new ObjectMapper();
-        String requestJson = objectMapper.writeValueAsString(request);
-
-        //EXPECTED
-            mockMvc.perform(post("/posts")
-    //MediaType.APPLICATION_FORM_URLENCODED_VALUE
-//                        .contentType(MediaType.APPLICATION_FORM_URLENCODED_VALUE)
-//                        .param("title","글 제목")
-//                        .param("content","글 내용")
-                                .contentType(APPLICATION_JSON)
-                                .content(requestJson)
-                )     //application/json
-                        .andExpect(status().isOk())
-            .andExpect(content().string(""))
-            .andDo(print());
-    }
-    @Test
     @DisplayName("/posts 요청시 파라미터 valid체크")
-    @WithMockUser(username = "jh2@kakao.com", password = "1234", roles = {"ADMIN"})
+    @AccountMockUser
     void testValid() throws Exception{
         //given
-        Post request = Post.builder().build();
+        PostRequest request = PostRequest.builder().build();
         //ObjectMapper objectMapper = new ObjectMapper();
         String requestJson = objectMapper.writeValueAsString(request);
 
@@ -104,16 +85,15 @@ class PostControllerTest {
                 .andExpect(jsonPath("$.code").value("400"))
                 .andExpect(jsonPath("$.message").value("잘못된 요청 입니다."))
                 .andDo(print());
-
     }
 
     @Test
     @DisplayName("/posts 요청 내용 DB 저장")
-    @WithMockUser(username = "jh2@kakao.com", password = "1234", roles = {"ADMIN"})
+    @AccountMockUser
     void test3() throws Exception{
 
         //given
-        Post request = Post.builder()
+        PostRequest request = PostRequest.builder()
                 .title("게시글 제목")
                 .content("게시글 내용")
                 .build();
@@ -251,13 +231,16 @@ class PostControllerTest {
 
     @Test
     @DisplayName("글 삭제하기")
-    @WithMockUser(username = "jh2@kakao.com", password = "1234", roles = {"ADMIN"})
+    @AccountMockUser
     void deleteById() throws Exception {
+
+        User user = userRepository.findAll().get(0);
 
 
         Post request = Post.builder()
                 .title("제목")
                 .content("내용")
+                .user(user)
                 .build();
         postRepository.save(request);
 

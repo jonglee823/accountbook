@@ -13,7 +13,8 @@ public class Post {
     }
 
     @Builder
-    public Post(String title, String content) {
+    public Post(String title, String content, User user) {
+        this.user = user;
         this.title = title;
         this.content = content;
     }
@@ -27,6 +28,10 @@ public class Post {
     @Lob
     private String content;
 
+    @ManyToOne
+    @JoinColumn
+    private User user;
+
     public PostEditor.PostEditorBuilder toEditor(){
         return PostEditor.builder()
                 .title(title)
@@ -36,5 +41,9 @@ public class Post {
     public void edit(PostEditor postEditor){
         title = postEditor.getTitle();
         content = postEditor.getContent();
+    }
+
+    public Long getUserId(){
+        return this.user.getId();
     }
 }

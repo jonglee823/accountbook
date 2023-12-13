@@ -1,10 +1,14 @@
 package com.accountbook.service;
 
 
+import com.accountbook.config.UserPrincipal;
 import com.accountbook.domain.Post;
 import com.accountbook.domain.PostEditor;
+import com.accountbook.domain.User;
 import com.accountbook.exception.PostNotFound;
+import com.accountbook.exception.UserNotFound;
 import com.accountbook.repository.PostRepository;
+import com.accountbook.repository.UserRepository;
 import com.accountbook.request.PostEdit;
 import com.accountbook.request.PostRequest;
 import com.accountbook.request.PostSearch;
@@ -22,14 +26,20 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class PostService {
 
+    private final UserRepository userRepository;
+
     private final PostRepository postRepository;
 
-    public void write(PostRequest postRequest) {
+    public void write(Long userId, PostRequest postRequest) {
+
+        User user = userRepository.findById(userId)
+                .orElseThrow(UserNotFound::new);
 
         //Post post = new Post(postRequest.getTitle(), postRequest.getContent());
         Post post = Post.builder()
                 .title(postRequest.getTitle())
                 .content(postRequest.getContent())
+                .user(user)
                 .build();
         postRepository.save(post);
     }

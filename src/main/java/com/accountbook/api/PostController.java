@@ -1,6 +1,7 @@
 package com.accountbook.api;
 
 
+import com.accountbook.config.UserPrincipal;
 import com.accountbook.request.PostEdit;
 import com.accountbook.request.PostRequest;
 import com.accountbook.request.PostSearch;
@@ -9,6 +10,8 @@ import com.accountbook.service.PostService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.parameters.P;
 import org.springframework.web.bind.annotation.*;
 
 import jakarta.validation.Valid;
@@ -28,8 +31,8 @@ public class PostController {
      */
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PostMapping("/posts")
-    public void post(@RequestBody @Valid PostRequest request){
-        postService.write(request);
+    public void post(@AuthenticationPrincipal UserPrincipal userPrincipal, @RequestBody @Valid PostRequest request){
+        postService.write(userPrincipal.getId(), request);
     }
 
     /*
@@ -60,9 +63,13 @@ public class PostController {
         return postService.edit(postId, postEdit);
     }
 
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+
+    //@PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PreAuthorize("hasRole('ROLE_ADMIN') && hasPermission(#postId, 'POST', 'DELETE')")
     @DeleteMapping("/posts/{postId}")
-    public void delete(@PathVariable(name="postId") Long postId){
+    public void delete(@PathVariable(name = "postId") @P("postId") Long postId) {
+
+        log.info(">>>>>>>>> DELETE : {} ", postId);
         postService.delete(postId);
     }
 }

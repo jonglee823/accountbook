@@ -1,12 +1,13 @@
 package com.accountbook.api;
 
+import com.accountbook.config.AccountMockUser;
 import com.accountbook.domain.Post;
+import com.accountbook.domain.User;
 import com.accountbook.repository.PostRepository;
+import com.accountbook.repository.UserRepository;
+import com.accountbook.request.PostRequest;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -42,18 +43,26 @@ public class PostContollerDocTest {
     @Autowired
     private PostRepository postRepository;
 
+    @Autowired
+    private UserRepository userRepository;
+
     @BeforeEach
     void setUp(WebApplicationContext webApplicationContext, RestDocumentationContextProvider restDocumentation) {
         this.mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext)
                 .apply(documentationConfiguration(restDocumentation)
-                                                        .uris().withScheme("https")
-                                                        .withHost("accoutbook.com").withPort(443)
+                        .uris().withScheme("https")
+                        .withHost("accoutbook.com").withPort(443)
                 )
                 .build();
     }
 
+    @AfterEach
+    void cleanUser(){
+        userRepository.deleteAll();
+    }
+
     @BeforeEach
-    void clean(){
+    void clean() {
         postRepository.deleteAll();
     }
 
@@ -72,38 +81,39 @@ public class PostContollerDocTest {
         postRepository.save(post);
 
         this.mockMvc.perform(get("/posts/{postId}", post.getId())
-                            .accept(MediaType.APPLICATION_JSON))
-                            .andDo(print())
-                            .andDo(document("post-inquiry"
-                                    , pathParameters(
-                                                parameterWithName("postId").description("게시글 ID")
-                                    ),
-                                    responseFields(
-                                            fieldWithPath("id").description("게시글 ID"),
-                                            fieldWithPath("title").description("게시글 제목"),
-                                            fieldWithPath("content").description("게시글 내용")
-                                    )
+                        .accept(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andDo(document("post-inquiry"
+                        , pathParameters(
+                                parameterWithName("postId").description("게시글 ID")
+                        ),
+                        responseFields(
+                                fieldWithPath("id").description("게시글 ID"),
+                                fieldWithPath("title").description("게시글 제목"),
+                                fieldWithPath("content").description("게시글 내용")
+                        )
 
-                            ))
-                            .andExpect(status().isOk());
+                ))
+                .andExpect(status().isOk());
     }
 
     @Test
     @DisplayName("게시글 저장")
-    @WithMockUser(username = "jh2@kakao.com", password = "1234", roles = {"ADMIN"})
-    void insertPost() throws Exception{
+    @AccountMockUser
+    void insertPost() throws Exception {
 
         //given
-        Post request = Post.builder()
+        PostRequest request = PostRequest.builder()
                 .title("게시글 제목")
                 .content("게시글 내용")
                 .build();
+
         ObjectMapper objectMapper = new ObjectMapper();
         String json = objectMapper.writeValueAsString(request);
         //글 제목
         //글 내용
         //EXPECTED
-        this.mockMvc.perform(post("/posts")
+    this.mockMvc.perform(post("/posts")
                         .contentType(APPLICATION_JSON)
                         .accept(APPLICATION_JSON)
                         .content(json)
@@ -111,10 +121,10 @@ public class PostContollerDocTest {
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andDo(document("post-create"
-                        ,requestFields(
-                                fieldWithPath("id").description("게시글 ID")
-                                ,fieldWithPath("title").description("게시글 제목")
-                                ,fieldWithPath("content").description("게시글 내용").optional()
+                        , requestFields(
+//                                fieldWithPath("id").description("게시글 ID")
+                                fieldWithPath("title").description("게시글 제목")
+                                , fieldWithPath("content").description("게시글 내용").optional()
                         )
                 ));
     }

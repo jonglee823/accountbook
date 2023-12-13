@@ -1,5 +1,6 @@
 package com.accountbook.request;
 
+import com.accountbook.domain.User;
 import lombok.*;
 
 import jakarta.validation.constraints.NotBlank;
@@ -10,6 +11,7 @@ import jakarta.validation.constraints.NotEmpty;
 @Setter
 @NoArgsConstructor
 public class PostRequest {
+
     @NotBlank(message = "타이틀을 입력해주세요.")
     private String title;
 

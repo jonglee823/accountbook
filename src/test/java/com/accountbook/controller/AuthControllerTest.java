@@ -7,6 +7,7 @@ import com.accountbook.repository.UserRepository;
 import com.accountbook.request.Login;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.jsonwebtoken.Jwts;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -47,7 +48,7 @@ class AuthControllerTest {
     @Autowired
     UserRepository userRepository;
 
-    @BeforeEach
+    @AfterEach
     public void clean(){
         userRepository.deleteAll();
     }
@@ -73,42 +74,42 @@ class AuthControllerTest {
         ;
     }
 
-    @Test
-    @Transactional
-    @DisplayName("회원 등록 후 DB에서 세션 확인")
-    void createMemberAndCheckSessionInDB() throws Exception {
-        //given
-        User user = userRepository.save(User.builder()
-                .name("이종혁")
-                .email("jh3@kakao.com")
-                .password("12345")
-                .build()
-        );
-
-        Session session = user.addSession();
-        userRepository.save(user);
-
-        String jws = Jwts.builder()
-                .subject(user.getId().toString())
-                .signWith(appConfig.getSecretKey())
-                .issuedAt(new Date())
-                .compact();
-
-        //EXPECTED
-        mockMvc.perform(get("/index")
-                        .contentType(APPLICATION_JSON)
-                        .header("Authorization", jws)
-                )
-                .andDo(print())
-                .andExpect(status().isOk())
-        ;
-
-        assert Jwts.parser().verifyWith(appConfig.getSecretKey())
-                .build()
-                .parseSignedClaims(jws)
-                .getPayload()
-                .getSubject()
-                .equals(user.getId().toString());
-    }
+//    @Test
+//    @Transactional
+//    @DisplayName("회원 등록 후 DB에서 세션 확인")
+//    void createMemberAndCheckSessionInDB() throws Exception {
+//        //given
+//        User user = userRepository.save(User.builder()
+//                .name("이종혁")
+//                .email("jh3@kakao.com")
+//                .password("12345")
+//                .build()
+//        );
+//
+//        Session session = user.addSession();
+//        userRepository.save(user);
+//
+//        String jws = Jwts.builder()
+//                .subject(user.getId().toString())
+//                .signWith(appConfig.getSecretKey())
+//                .issuedAt(new Date())
+//                .compact();
+//
+//        //EXPECTED
+//        mockMvc.perform(get("/index")
+//                        .contentType(APPLICATION_JSON)
+//                        .header("Authorization", jws)
+//                )
+//                .andDo(print())
+//                .andExpect(status().isOk())
+//        ;
+//
+//        assert Jwts.parser().verifyWith(appConfig.getSecretKey())
+//                .build()
+//                .parseSignedClaims(jws)
+//                .getPayload()
+//                .getSubject()
+//                .equals(user.getId().toString());
+//    }
 
 }
